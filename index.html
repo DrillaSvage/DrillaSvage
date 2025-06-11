@@ -5,75 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GTL Countdown</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Monoton&display=swap" rel="stylesheet">
     <style>
         /* Define custom properties for easy theme management */
         :root {
-            --leopard-print: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M22.5 40a17.5 17.5 0 1 1 0-35 17.5 17.5 0 0 1 0 35zM40 22.5a17.5 17.5 0 1 0-35 0 17.5 17.5 0 0 0 35 0z'/%3E%3C/g%3E%3C/svg%3E");
-            --y2k-pink: #ff00ff;
-            --y2k-blue: #00ffff;
-            --y2k-border: #4a4a4a;
-            --phone-bg: #c0c0c0;
-            --phone-screen-bg: #a8e890;
+            --y2k-pink: #f72585; /* Vibrant Pink */
+            --y2k-purple: #7209b7; /* Deep Purple */
+            --y2k-blue: #4cc9f0; /* Bright Cyan */
+            --y2k-lime: #aacc00; /* Lime Green */
         }
 
-        /* Set up the overall page style with leopard print background */
+        @keyframes background-pan {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Set up the overall page style with a new animated background */
         body {
             font-family: 'VT323', monospace;
-            background-color: #f7e4d3;
-            background-image: var(--leopard-print);
-            overflow-x: hidden; /* Prevent horizontal scrollbars from animated characters */
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'%3E%3Ctext y='24'%3E✨%3C/text%3E%3C/svg%3E"), auto;
+            background: linear-gradient(-45deg, var(--y2k-pink), var(--y2k-purple), var(--y2k-blue), var(--y2k-lime));
+            background-size: 400% 400%;
+            animation: background-pan 15s ease infinite;
+            overflow-x: hidden; /* Prevent horizontal scrollbars */
+            color: #fff;
         }
 
-        /* Glitter text animation */
-        @keyframes glitter {
-            0% { text-shadow: 0 0 4px var(--y2k-pink), 0 0 8px var(--y2k-pink), 0 0 12px #fff; }
-            50% { text-shadow: 0 0 6px var(--y2k-blue), 0 0 10px var(--y2k-blue), 0 0 16px #fff; }
-            100% { text-shadow: 0 0 4px var(--y2k-pink), 0 0 8px var(--y2k-pink), 0 0 12px #fff; }
+        /* --- Text Style Refinements --- */
+        @keyframes text-glow {
+            0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--y2k-pink), 0 0 20px var(--y2k-pink); }
+            50% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--y2k-blue), 0 0 40px var(--y2k-blue); }
+            100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--y2k-pink), 0 0 20px var(--y2k-pink); }
         }
 
         .glitter-text {
             font-family: 'Monoton', cursive;
-            animation: glitter 1.5s infinite linear;
             color: #fff;
-            -webkit-text-stroke: 1px black;
+            animation: text-glow 2s infinite linear;
+            -webkit-text-stroke: 1px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle-text {
+             color: #fff;
+             font-family: 'VT323', monospace;
+             text-shadow: 0 0 5px var(--y2k-blue), 0 0 10px var(--y2k-blue);
         }
 
-        /* Phone-style timer container */
+        /* Refined Phone-style timer container */
         .phone-container {
-            background: linear-gradient(145deg, #e0e0e0, #a0a0a0);
-            border: 4px solid var(--y2k-border);
-            border-radius: 20px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5), inset 3px 3px 5px rgba(255,255,255,0.6), inset -3px -3px 5px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            z-index: 10;
+            padding: 1rem;
         }
 
         .phone-screen {
-            background-color: var(--phone-screen-bg);
-            border: 3px inset var(--y2k-border);
+            background-color: #a8e890;
+            border-radius: 12px;
+            border: 3px inset #3a3a3a;
             box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
             color: #333;
+        }
+        
+        /* Refined container style for soundboard and facts */
+        .glass-container {
+             background: rgba(0, 0, 0, 0.2);
+             backdrop-filter: blur(5px);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             border-radius: 16px;
+             padding: 1.5rem;
+        }
+        
+        @keyframes neon-glow-border {
+            0% { box-shadow: 0 0 5px var(--y2k-pink), 0 0 10px var(--y2k-pink), inset 0 0 5px var(--y2k-pink); }
+            33% { box-shadow: 0 0 5px var(--y2k-blue), 0 0 10px var(--y2k-blue), inset 0 0 5px var(--y2k-blue); }
+            66% { box-shadow: 0 0 5px var(--y2k-lime), 0 0 10px var(--y2k-lime), inset 0 0 5px var(--y2k-lime); }
+            100% { box-shadow: 0 0 5px var(--y2k-pink), 0 0 10px var(--y2k-pink), inset 0 0 5px var(--y2k-pink); }
         }
 
         /* Photo button styles for the soundboard */
         .photo-button {
             background-color: #fff;
-            padding: 10px 10px 20px 10px;
-            border-radius: 4px;
-            box-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+            padding: 10px;
+            border-radius: 8px;
             transition: all 0.2s ease-in-out;
             cursor: pointer;
             width: 140px;
             text-align: center;
+            border: 2px solid transparent;
+            animation: neon-glow-border 4s infinite linear;
         }
 
         .photo-button img {
-            width: 120px;
+            width: 100%;
             height: 90px;
             object-fit: cover;
-            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
         .photo-button p {
@@ -83,12 +117,10 @@
             font-weight: bold;
         }
 
-        .photo-button:nth-child(odd) { transform: rotate(-4deg); }
-        .photo-button:nth-child(even) { transform: rotate(4deg); }
-        .photo-button:hover { transform: rotate(0deg) scale(1.1) translateY(-10px); box-shadow: 6px 6px 15px rgba(0,0,0,0.5); z-index: 10; }
+        .photo-button:hover { transform: scale(1.1) translateY(-10px); z-index: 20; }
         
-        /* Floating character styles */
-        .character { position: absolute; width: 120px; height: 120px; background-size: contain; background-repeat: no-repeat; will-change: transform; opacity: 0.85; pointer-events: none; }
+        /* Floating character styles. Set z-index to 1 so they are behind the phone. */
+        .character { position: absolute; width: 120px; height: 120px; background-size: contain; background-repeat: no-repeat; will-change: transform; opacity: 0.85; pointer-events: none; z-index: 1; }
 
         /* --- Character Animations --- */
         @keyframes float-diag { 0% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(40vw, -40vh) rotate(10deg); } 100% { transform: translate(0, 0) rotate(0deg); } }
@@ -97,31 +129,51 @@
         @keyframes pauly-d-fist-pump { 0%, 100% { transform: translateY(0) rotate(5deg) scale(1); } 50% { transform: translateY(-30px) rotate(-8deg) scale(1.1); } }
         @keyframes pop-in-out { 0%, 100% { opacity: 0; transform: scale(0.5); } 20%, 80% { opacity: 0.85; transform: scale(1); } }
         @keyframes meatball-dance { 0%, 100% { transform: translate(0, 0) rotate(-3deg); } 25% { transform: translate(-10px, -10px) rotate(0deg); } 50% { transform: translate(0, 0) rotate(3deg); } 75% { transform: translate(10px, -10px) rotate(0deg); } }
+        @keyframes flame-float { 0% { transform: translateY(10vh) scale(1) rotate(5deg); opacity: 0.6; } 100% { transform: translateY(-100vh) scale(1.5) rotate(-5deg); opacity: 0; } }
+        
         #pauly-d { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E🎧%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EPauly D%3C/text%3E%3C/svg%3E"); bottom: 5%; right: 5%; animation: pauly-d-fist-pump 1s infinite ease-in-out; }
         #snooki { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E🤸%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3ESnooki%3C/text%3E%3C/svg%3E"); bottom: 10%; left: -15vw; animation: float-across 20s infinite linear; }
         #the-situation { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E💪%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EThe Situation%3C/text%3E%3C/svg%3E"); top: 5%; left: 10%; animation: float-up-down 15s infinite ease-in-out; animation-delay: -5s; }
         #jwoww { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E💅%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EJWoww%3C/text%3E%3C/svg%3E"); top: 20%; left: 20%; animation: float-diag 25s infinite ease-in-out; }
-        #deena { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E💃%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EDeena%3C/text%3E%3C/svg%3E"); bottom: 20%; left: 15%; animation: meatball-dance 3s infinite ease-in-out; }
-        #angelina { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E💁%E2%80%8D♀%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EAngelina%3C/text%3E%3C/svg%3E"); top: 15%; right: 15%; animation: pop-in-out 8s infinite ease-in-out; }
         
+        #flame1 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='80' text-anchor='middle'%3E🔥%3C/text%3E%3C/svg%3E"); bottom: -10vh; left: 10vw; animation: flame-float 10s infinite linear; }
+        #flame2 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='80' text-anchor='middle'%3E🔥%3C/text%3E%3C/svg%3E"); bottom: -10vh; left: 50vw; animation: flame-float 12s infinite linear; animation-delay: -5s; }
+        #flame3 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='80' text-anchor='middle'%3E🔥%3C/text%3E%3C/svg%3E"); bottom: -10vh; left: 80vw; animation: flame-float 9s infinite linear; animation-delay: -2s; }
+
         /* Splash Screen styling */
-        #splash-screen { background: black; transition: opacity 1s ease-in-out; }
+        #splash-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; 
+            transition: opacity 1s ease-in-out; 
+            z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow-y: auto; 
+        }
         @keyframes duck-phone-quack { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
         #duck-phone { font-size: 150px; animation: duck-phone-quack 0.5s infinite; }
 
-        /* Gemini Modal Styling */
-        #gemini-modal {
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
+        /* Photo Modal Styling & Animation */
+        #photo-modal { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 50;}
+        #photo-modal-content { max-width: 90vw; max-height: 90vh; }
+        #photo-modal-close { top: 1rem; right: 1rem; font-size: 2rem; }
+        #photo-modal-quote {
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.5rem;
+            text-shadow: 0 0 5px var(--y2k-pink), 0 0 10px var(--y2k-pink);
         }
-        .modal-content {
-            background-image: var(--leopard-print);
-            background-color: #e0e0e0;
-            border: 4px solid var(--y2k-pink);
-            box-shadow: 0 0 20px var(--y2k-blue);
+        
+        @keyframes zoom-in {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        #photo-modal.flex #photo-modal-content {
+            animation: zoom-in 0.3s ease-out;
         }
 
-        /* Generic Y2K button style */
+        /* Y2K Button Style */
         .y2k-button {
             background: linear-gradient(to bottom, #87e0fd 0%,#53cbf1 40%,#05abe0 100%);
             border: 2px solid #007399;
@@ -129,6 +181,9 @@
             transition: all 0.2s ease-in-out;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
         }
         .y2k-button:hover {
             filter: brightness(1.1);
@@ -137,39 +192,47 @@
             transform: translateY(3px);
             box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 2px 3px rgba(255,255,255,0.5);
         }
-        .y2k-button:disabled {
-            background: #999;
-            cursor: not-allowed;
+        
+        /* New style for the facts headline */
+        .facts-headline {
+            font-family: 'VT323', monospace;
+            color: #fff;
+            text-shadow: 0 0 7px #fff, 0 0 10px var(--y2k-lime), 0 0 21px var(--y2k-lime), 0 0 42px var(--y2k-lime);
         }
 
     </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen p-4">
 
     <!-- Splash Screen -->
-    <div id="splash-screen" class="absolute inset-0 z-50 flex flex-col items-center justify-center">
+    <div id="splash-screen">
         <div id="duck-phone">🦆</div>
-        <h2 id="splash-text" class="text-3xl mt-4 glitter-text">CABS ARE HERE!</h2>
+        <h2 id="splash-text" class="text-3xl mt-4 glitter-text text-center">CABS ARE HERE!</h2>
     </div>
 
     <!-- Main Content -->
-    <main id="main-content" class="text-center p-4 md:p-8 opacity-0 transition-opacity duration-1000 w-full">
+    <main id="main-content" class="text-center w-full max-w-4xl mx-auto opacity-0 transition-opacity duration-1000">
         <!-- Floating Characters -->
         <div id="pauly-d" class="character"></div>
         <div id="snooki" class="character"></div>
         <div id="the-situation" class="character"></div>
         <div id="jwoww" class="character"></div>
-        <div id="deena" class="character"></div>
-        <div id="angelina" class="character"></div>
+        <div id="flame1" class="character"></div>
+        <div id="flame2" class="character"></div>
+        <div id="flame3" class="character"></div>
 
         <!-- Header -->
-        <h1 class="text-4xl md:text-6xl mb-2 glitter-text">GTL Countdown</h1>
-        <p class="text-lg md:text-2xl text-white text-shadow-lg mb-6" style="text-shadow: 2px 2px 2px black;">IT'S T-SHIRT TIME!</p>
+        <h1 class="text-5xl md:text-7xl mb-4 glitter-text">GTL Countdown</h1>
+        <p class="text-2xl md:text-3xl subtitle-text mb-8">
+            <span class="mx-2">💪</span>
+            IT'S T-SHIRT TIME!
+            <span class="mx-2">🏋️</span>
+        </p>
 
-        <!-- Countdown Timer Styled like a Flip Phone -->
-        <div class="phone-container max-w-lg mx-auto p-4">
+        <!-- Countdown Timer -->
+        <div class="phone-container max-w-lg mx-auto">
             <div class="phone-screen p-4 rounded-lg mb-4">
-                <p class="text-lg md:text-xl mb-2">Next Episode Drops In...</p>
+                <p class="text-lg md:text-xl mb-2 font-bold">Next Episode Drops In...</p>
                 <div id="timer-display" class="text-4xl md:text-6xl font-bold tracking-widest flex justify-center space-x-2 md:space-x-4">
                     <div class="flex flex-col"><span id="days">00</span><span class="text-xs">DAYS</span></div>
                     <div>:</div>
@@ -179,43 +242,33 @@
                     <div>:</div>
                     <div class="flex flex-col"><span id="seconds">00</span><span class="text-xs">SEC</span></div>
                 </div>
-                 <!-- This will be shown after countdown finishes -->
-                <div id="recap-container" class="hidden"> 
-                    <button id="generate-recap-btn" class="y2k-button font-bold py-2 px-4 rounded-xl text-lg">✨ Generate a Fake Recap ✨</button>
-                </div>
             </div>
-            <p id="episode-info" class="text-sm text-gray-700">S7, Ep XX: Loading...</p>
+            <p id="episode-info" class="text-sm text-white/80">Loading episode info...</p>
         </div>
 
-        <!-- Gemini API Features Section -->
-        <div class="mt-12">
-            <h3 class="text-3xl mb-6 glitter-text" style="color:#ff00ff;">✨ AI DRAMA GENERATOR ✨</h3>
-            <div class="max-w-xl mx-auto p-4 rounded-lg border-2 border-dashed border-y2k-pink">
-                 <p class="text-white text-shadow-lg mb-4">Ever wonder what would happen if the cast tried to do their taxes? Or went camping? Let the AI tell you.</p>
-                 <button id="generate-scenario-btn" class="y2k-button font-bold py-2 px-4 rounded-xl text-lg">Spitball a Scenario</button>
+        <!-- Soundboard Section -->
+        <div class="mt-12 glass-container">
+            <h3 class="text-3xl mb-6 glitter-text" style="color:var(--y2k-blue);">JERSEY SHORE CAST</h3>
+            <div id="soundboard-grid" class="flex flex-wrap justify-center items-start gap-8">
+                <!-- Photo buttons will be generated by JavaScript -->
             </div>
         </div>
 
-        <!-- Soundboard Section with Photos -->
-        <div class="mt-12">
-            <h3 class="text-3xl mb-6 glitter-text" style="color:#00ffff;">JERSEY SHORE CAST</h3>
-            <div class="flex flex-wrap justify-center items-center gap-8 max-w-3xl mx-auto">
-                <div data-sound="tshirt" class="photo-button"><img src="https://www.usmagazine.com/wp-content/uploads/2020/09/DJ-Pauly-D-Talks-About-His-Love-of-Hair-and-His-New-Got2b-Products.jpg?crop=51px%2C12px%2C1866px%2C1054px&resize=1000%2C563&quality=82&strip=all" onerror="this.onerror=null;this.src='https://placehold.co/120x90/000/fff?text=Pauly+D';" alt="Pauly D"><p>"T-Shirt Time!"</p></div>
-                <div data-sound="yeah" class="photo-button"><img src="https://www.realitytea.com/wp-content/uploads/sites/6/2024/02/GettyImages-1588833062.jpg?resize=1024,683" onerror="this.onerror=null;this.src='https://placehold.co/120x90/ff00ff/fff?text=Sammy';" alt="Sammy"><p>"RON STOP"</p></div>
-                <div data-sound="situation" class="photo-button"><img src="https://media-cldnry.s-nbcnews.com/image/upload/t_fit-560w,f_auto,q_auto:best/newscms/2021_03/1665026/mike-the-situation-square-today.jpg" onerror="this.onerror=null;this.src='https://placehold.co/120x90/00ffff/000?text=Mike';" alt="The Situation"><p>"We got a situation!"</p></div>
-                <div data-sound="hello" class="photo-button"><img src="https://ntvb.tmsimg.com/assets/assets/587667_v9_bc.jpg" onerror="this.onerror=null;this.src='https://placehold.co/120x90/f0f/000?text=Angelina';" alt="Angelina"><p>"Um, Hello?!"</p></div>
-                <div data-sound="meatball" class="photo-button"><img src="https://people.com/thmb/OKd84RQdriONs51r8aKnTDeOpl8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(734x227:736x229):format(webp)/Nicole-Snooki-Polizzi-020124-70985eeec4ce47ce99e0711f14e8a181.jpg" onerror="this.onerror=null;this.src='https://placehold.co/120x90/f90/000?text=Snooki';" alt="Snooki"><p>"I'm a meatball!"</p></div>
-                <div data-sound="duck" class="photo-button"><img src="https://zandymangoldnyc.com/wp-content/uploads/2011/01/4m8w0759_zm_web.jpg" onerror="this.onerror=null;this.src='https://placehold.co/120x90/ff0/000?text=Duck+Phone';" alt="Duck Phone"><p>"Quack Quack"</p></div>
-            </div>
+        <!-- Fun Facts Section -->
+        <div class="mt-12 glass-container">
+            <h3 class="text-3xl mb-4 facts-headline">SHORE-LY YOU DIDN'T KNOW!</h3>
+            <p id="fact-display" class="text-lg min-h-[3em] my-4 text-white/90">Click the button for a random fact!</p>
+            <button id="generate-fact-btn" class="y2k-button">Get Fact!</button>
         </div>
     </main>
 
-    <!-- Gemini AI Modal -->
-    <div id="gemini-modal" class="fixed inset-0 z-50 flex-col items-center justify-center p-4 hidden">
-        <div class="modal-content w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6 rounded-lg text-black">
-            <h2 id="gemini-modal-title" class="text-3xl font-bold mb-4 text-center glitter-text text-white">AI Generated Drama!</h2>
-            <div id="gemini-modal-text" class="text-lg whitespace-pre-wrap">Loading...</div>
-            <button id="gemini-modal-close" class="y2k-button w-full mt-6 py-2 rounded-xl">Close</button>
+    <!-- Photo Enlarger Modal -->
+    <div id="photo-modal" class="fixed inset-0 flex-col items-center justify-center p-4 hidden">
+        <div id="photo-modal-backdrop" class="absolute inset-0"></div>
+        <div id="photo-modal-content" class="relative flex flex-col items-center">
+            <button id="photo-modal-close" class="absolute text-white">&times;</button>
+            <img id="photo-modal-img" src="" alt="Enlarged cast photo" class="object-contain max-w-full max-h-[80vh]">
+            <p id="photo-modal-quote"></p>
         </div>
     </div>
 
@@ -224,53 +277,58 @@
         document.addEventListener('DOMContentLoaded', () => {
             let audioInitialized = false;
 
-            // --- REAL AUDIO SOUNDBOARD LOGIC ---
-            const soundSources = {
-                tshirt: "URL_FOR_TSHIRT_TIME_SOUND_HERE.mp3",
-                yeah: "URL_FOR_RON_STOP_SOUND_HERE.mp3",
-                situation: "URL_FOR_SITUATION_SOUND_HERE.mp3",
-                hello: "URL_FOR_UM_HELLO_SOUND_HERE.mp3",
-                meatball: "URL_FOR_MEATBALL_SOUND_HERE.mp3",
-                duck: "URL_FOR_DUCK_PHONE_SOUND_HERE.mp3",
-                splash: "URL_FOR_CABS_ARE_HERE_SOUND_HERE.mp3",
-                backgroundMusic: "https://dl.dropbox.com/scl/fi/helveq32u8h7a20i9uj0i/upbeat-advertising-background-music-1m-355676.mp3?rlkey=fhz7bf57kl95j1oh05zj8dvs3&st=hv1pktpo&"
-            };
-            
-            const audioPlayers = {};
+            // --- CENTRALIZED PHOTO AND SOUND DATA ---
+            const castData = [
+                { id: 'tshirt', name: 'Pauly D', quote: '"T-Shirt Time!"', img: 'https://www.usmagazine.com/wp-content/uploads/2020/09/DJ-Pauly-D-Talks-About-His-Love-of-Hair-and-His-New-Got2b-Products.jpg?crop=51px%2C12px%2C1866px%2C1054px&resize=1000%2C563&quality=82&strip=all' },
+                { id: 'yeah', name: 'Sammi', quote: '"RON, STAAHP!"', img: 'https://www.realitytea.com/wp-content/uploads/sites/6/2024/02/GettyImages-1588833062.jpg?resize=1024,683' },
+                { id: 'situation', name: 'The Situation', quote: '"We got a situation!"', img: 'https://media-cldnry.s-nbcnews.com/image/upload/t_fit-560w,f_auto,q_auto:best/newscms/2021_03/1665026/mike-the-situation-square-today.jpg' },
+                { id: 'hello', name: 'Angelina', quote: '"Um, Hello?!"', img: 'https://ntvb.tmsimg.com/assets/assets/587667_v9_bc.jpg' },
+                { id: 'meatball', name: 'Snooki', quote: '"I\'m a meatball!"', img: 'https://people.com/thmb/OKd84RQdriONs51r8aKnTDeOpl8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(734x227:736x229):format(webp)/Nicole-Snooki-Polizzi-020124-70985eeec4ce47ce99e0711f14e8a181.jpg' },
+                { id: 'duck', name: 'Duck Phone', quote: '"Quack Quack"', img: 'https://zandymangoldnyc.com/wp-content/uploads/2011/01/4m8w0759_zm_web.jpg' }
+            ];
 
+            // --- FUN FACTS DATA ---
+            const jerseyShoreFacts = [
+                "The iconic duck phone was found by producers in a local thrift store.",
+                "Snooki's real name is Nicole Polizzi.",
+                "The show was originally going to be a competition series on VH1 called 'America's Biggest Guido.'",
+                "Pauly D is the only cast member to appear in every single episode of Jersey Shore and its spin-offs.",
+                "The 'GTL' routine (Gym, Tan, Laundry) became a national catchphrase.",
+                "Before the show, Jenni 'JWoww' Farley owned her own graphic design business.",
+                "The cast didn't have access to phones, TV, or the internet to encourage more interaction.",
+                "The Shore Store, where the cast worked, is a real place in Seaside Heights, New Jersey.",
+                "Deena was originally supposed to be on Season 1 but had to back out due to family issues.",
+                "Vinny is the only cast member who actually lived in Staten Island.",
+                "The house's hot tub was reportedly so over-used it had to be replaced multiple times.",
+                "Snooki's famous 'poof' hairstyle required a significant amount of hairspray to maintain.",
+            ];
+
+            // --- TONE.JS SOUNDBOARD LOGIC ---
+            const clickVolume = new Tone.Volume(-10).toDestination(); 
+            const clickSound = new Tone.PluckSynth({ attackNoise: 0.5, dampening: 8000, resonance: 0.9 }).connect(clickVolume);
+            const splashSound = new Tone.PluckSynth().connect(clickVolume);
+            
             function playSound(soundName) {
-                if (!audioInitialized || !soundSources[soundName] || soundSources[soundName].startsWith("URL_FOR")) {
-                    console.warn(`Audio not initialized or URL for "${soundName}" is not set.`);
-                    return;
-                }
-                if (audioPlayers[soundName] && !audioPlayers[soundName].paused) {
-                    audioPlayers[soundName].pause();
-                    audioPlayers[soundName].currentTime = 0;
-                }
-                audioPlayers[soundName] = new Audio(soundSources[soundName]);
-                audioPlayers[soundName].play().catch(error => console.error(`Error playing sound "${soundName}":`, error));
+                if (!audioInitialized) return;
+                const note = soundName === 'splash' ? 'C5' : 'C4';
+                const synth = soundName === 'splash' ? splashSound : clickSound;
+                synth.triggerAttack(note, Tone.now());
             }
 
             // --- Splash Screen and App Start Logic ---
             const splashScreen = document.getElementById('splash-screen');
             const mainContent = document.getElementById('main-content');
             
-            function startApp() {
+            async function startApp() {
                 if (audioInitialized) return;
+                await Tone.start();
                 audioInitialized = true;
                 playSound('splash');
-                const bgMusicUrl = soundSources.backgroundMusic;
-                if (bgMusicUrl && !bgMusicUrl.startsWith("URL_FOR")) {
-                    try {
-                        const backgroundAudio = new Audio(bgMusicUrl);
-                        backgroundAudio.loop = true;
-                        backgroundAudio.volume = 0.1;
-                        backgroundAudio.play().catch(e => console.error("Background music failed to play:", e));
-                    } catch (e) { console.error("Could not create background audio object. Check the URL.", e); }
-                }
                 splashScreen.style.opacity = '0';
                 splashScreen.style.pointerEvents = 'none';
-                setTimeout(() => { mainContent.style.opacity = '1'; }, 500);
+                setTimeout(() => { 
+                    mainContent.style.opacity = '1';
+                }, 500);
             }
 
             document.body.addEventListener('click', startApp, { once: true });
@@ -283,30 +341,33 @@
             const secondsEl = document.getElementById('seconds');
             const episodeInfoEl = document.getElementById('episode-info');
             const timerDisplayEl = document.getElementById('timer-display');
-            const recapContainerEl = document.getElementById('recap-container');
 
-            function getNextThursday() {
+            function getNextThursday8PMET() {
                 const now = new Date();
-                const today = now.getDay();
-                let nextThursday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + (4 - today + 7) % 7, 0, 0, 0));
-                if (now.getTime() > nextThursday.getTime()) {
-                    nextThursday.setTime(nextThursday.getTime() + 7 * 24 * 60 * 60 * 1000);
+                const timeZone = 'America/New_York';
+                const nowInET = new Date(now.toLocaleString('en-US', { timeZone }));
+                const todayInET = nowInET.getDay(); // Sunday = 0, Thursday = 4
+                let daysUntilThursday = (4 - todayInET + 7) % 7;
+                if (daysUntilThursday === 0 && nowInET.getHours() >= 20) {
+                    daysUntilThursday = 7;
                 }
-                return nextThursday;
+                const targetDate = new Date(nowInET);
+                targetDate.setDate(targetDate.getDate() + daysUntilThursday);
+                targetDate.setHours(20, 0, 0, 0);
+                return targetDate;
             }
 
-            const countdownDate = getNextThursday();
-            episodeInfoEl.textContent = `Episode Airs: ${countdownDate.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric' })} at 8 PM ET`;
-
+            const countdownDate = getNextThursday8PMET();
+            episodeInfoEl.textContent = `Episode Airs: ${countdownDate.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric' })} at 8:00 PM ET`;
+            
             const countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
+                const now = new Date();
                 const distance = countdownDate - now;
 
                 if (distance < 0) {
                     clearInterval(countdownInterval);
-                    timerDisplayEl.classList.add('hidden');
-                    recapContainerEl.classList.remove('hidden');
-                    episodeInfoEl.textContent = "It's T-Shirt Time! The episode has aired!";
+                    timerDisplayEl.innerHTML = `<div class="text-3xl">The Episode Has Aired!</div>`;
+                    episodeInfoEl.textContent = "It's T-Shirt Time!";
                     return;
                 }
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -319,89 +380,60 @@
                 secondsEl.textContent = String(seconds).padStart(2, '0');
             }, 1000);
 
-            // --- Add click listeners to the soundboard photo buttons ---
-            document.querySelectorAll('.photo-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const soundName = button.dataset.sound;
-                    playSound(soundName);
-                });
-            });
+            // --- Photo Modal Logic ---
+            const photoModal = document.getElementById('photo-modal');
+            const photoModalImg = document.getElementById('photo-modal-img');
+            const photoModalQuote = document.getElementById('photo-modal-quote');
+            const photoModalCloseBtn = document.getElementById('photo-modal-close');
+            const photoModalBackdrop = document.getElementById('photo-modal-backdrop');
 
-            // --- Gemini API Integration ---
-            const geminiModal = document.getElementById('gemini-modal');
-            const geminiModalTitle = document.getElementById('gemini-modal-title');
-            const geminiModalText = document.getElementById('gemini-modal-text');
-            const geminiModalCloseBtn = document.getElementById('gemini-modal-close');
-            const generateScenarioBtn = document.getElementById('generate-scenario-btn');
-            const generateRecapBtn = document.getElementById('generate-recap-btn');
-
-            const API_KEY = ""; // Leave blank, Canvas will handle it
-
-            async function callGemini(prompt, buttonToDisable) {
-                buttonToDisable.disabled = true;
-                buttonToDisable.textContent = 'Thinking...';
-                geminiModalText.textContent = 'Generating... please wait...';
-                geminiModal.classList.remove('hidden');
-                geminiModal.classList.add('flex');
-
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-                const payload = { contents: [{ parts: [{ text: prompt }] }] };
-
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                       throw new Error(`API Error: ${response.statusText}`);
-                    }
-                    const result = await response.json();
-                    
-                    if (result.candidates && result.candidates.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        geminiModalText.textContent = text;
-                    } else {
-                        throw new Error("No content received from API.");
-                    }
-                } catch (error) {
-                    console.error("Gemini API call failed:", error);
-                    geminiModalText.textContent = `Error: Could not generate content. ${error.message}`;
-                } finally {
-                    buttonToDisable.disabled = false;
-                     if (buttonToDisable === generateScenarioBtn) buttonToDisable.textContent = 'Spitball a Scenario';
-                     if (buttonToDisable === generateRecapBtn) buttonToDisable.textContent = '✨ Generate a Fake Recap ✨';
-                }
+            function openPhotoModal(imgSrc, quote) {
+                photoModalImg.src = imgSrc;
+                photoModalQuote.textContent = quote;
+                photoModal.classList.remove('hidden');
+                photoModal.classList.add('flex');
             }
+
+            function closePhotoModal() {
+                photoModal.classList.add('hidden');
+                photoModal.classList.remove('flex');
+                photoModalImg.src = '';
+                photoModalQuote.textContent = '';
+            }
+
+            // --- DYNAMICALLY CREATE AND ADD SOUNDBOARD BUTTONS ---
+            const soundboardGrid = document.getElementById('soundboard-grid');
+            castData.forEach(castMember => {
+                const button = document.createElement('div');
+                button.className = 'photo-button';
+                button.dataset.sound = castMember.id;
+                const img = document.createElement('img');
+                img.src = castMember.img;
+                img.alt = castMember.name;
+                img.onerror = function() { this.onerror=null; this.src=`https://placehold.co/120x90/333/fff?text=${castMember.name.replace(' ', '+')}`; };
+                const p = document.createElement('p');
+                p.textContent = castMember.quote;
+                button.appendChild(img);
+                button.appendChild(p);
+                button.addEventListener('click', () => {
+                    playSound(castMember.id);
+                    openPhotoModal(castMember.img, castMember.quote);
+                });
+                soundboardGrid.appendChild(button);
+            });
             
-            // Event listener for the "Spitball a Scenario" button
-            generateScenarioBtn.addEventListener('click', () => {
-                const scenarios = [
-                    "the Jersey Shore cast tries to assemble complex IKEA furniture.",
-                    "the Jersey Shore cast gets lost while camping in the woods.",
-                    "the Jersey Shore cast attempts to host a fancy, formal dinner party.",
-                    "the Jersey Shore cast opens a bookstore.",
-                    "the Jersey Shore cast has to work on a farm for a week.",
-                    "the Jersey Shore cast runs a daycare center for a day."
-                ];
-                const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
-                const prompt = `Write a short, funny, and dramatic story about what would happen if ${randomScenario}. Write it in the style of a reality TV show scene description, focusing on dialogue and over-the-top reactions.`;
-                geminiModalTitle.textContent = "AI Generated Scenario!";
-                callGemini(prompt, generateScenarioBtn);
+            photoModalCloseBtn.addEventListener('click', closePhotoModal);
+            photoModalBackdrop.addEventListener('click', closePhotoModal);
+
+            // --- Fun Facts Logic ---
+            const generateFactBtn = document.getElementById('generate-fact-btn');
+            const factDisplay = document.getElementById('fact-display');
+
+            generateFactBtn.addEventListener('click', () => {
+                const randomIndex = Math.floor(Math.random() * jerseyShoreFacts.length);
+                factDisplay.textContent = jerseyShoreFacts[randomIndex];
             });
 
-            // Event listener for the "Generate Recap" button
-            generateRecapBtn.addEventListener('click', () => {
-                 const prompt = "Write a snarky, funny, and over-the-top gossip blog recap for a fictional, brand new episode of 'Jersey Shore Family Vacation'. Invent a dramatic plot, including a ridiculous fight, a classic GTL moment, and a bizarre housemate argument. Make it sound like it was written in 2010.";
-                 geminiModalTitle.textContent = "This Week's Fake Drama!";
-                 callGemini(prompt, generateRecapBtn);
-            });
-
-            // Event listener for closing the modal
-            geminiModalCloseBtn.addEventListener('click', () => {
-                geminiModal.classList.add('hidden');
-                geminiModal.classList.remove('flex');
-            });
         });
     </script>
 </body>
