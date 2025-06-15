@@ -3,438 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTL Countdown</title>
+    <title>Happy Father's Day, Rene!</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Monoton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Define custom properties for easy theme management */
-        :root {
-            --y2k-pink: #f72585; /* Vibrant Pink */
-            --y2k-purple: #7209b7; /* Deep Purple */
-            --y2k-blue: #4cc9f0; /* Bright Cyan */
-            --y2k-lime: #aacc00; /* Lime Green */
-        }
-
-        @keyframes background-pan {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Set up the overall page style with a new animated background */
         body {
-            font-family: 'VT323', monospace;
-            background: linear-gradient(-45deg, var(--y2k-pink), var(--y2k-purple), var(--y2k-blue), var(--y2k-lime));
-            background-size: 400% 400%;
-            animation: background-pan 15s ease infinite;
-            overflow-x: hidden; /* Prevent horizontal scrollbars */
-            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a1a2e;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(57, 62, 117, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(35, 155, 144, 0.3) 0%, transparent 40%);
         }
-
-        /* --- Text Style Refinements --- */
-        @keyframes text-glow {
-            0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--y2k-pink), 0 0 20px var(--y2k-pink); }
-            50% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--y2k-blue), 0 0 40px var(--y2k-blue); }
-            100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--y2k-pink), 0 0 20px var(--y2k-pink); }
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
         }
-
-        .glitter-text {
-            font-family: 'Monoton', cursive;
-            color: #fff;
-            animation: text-glow 2s infinite linear;
-            -webkit-text-stroke: 1px rgba(0,0,0,0.2);
+        .text-glow {
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.6), 0 0 20px rgba(59, 130, 246, 0.4);
         }
-        
-        .subtitle-text {
-             color: #fff;
-             font-family: 'VT323', monospace;
-             text-shadow: 0 0 5px var(--y2k-blue), 0 0 10px var(--y2k-blue);
+        .bender-body { background-color: #8D918D; }
+        .bender-mouth-grill {
+            height: 40px;
+            background-image: repeating-linear-gradient(0deg, #444, #444 3px, transparent 3px, transparent 7px);
         }
-
-        /* Refined Phone-style timer container */
-        .phone-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        #bender-antenna {
+            animation: antenna-glow 3s infinite ease-in-out;
+        }
+        @keyframes antenna-glow {
+            0%, 100% { box-shadow: 0 0 10px 2px #fef08a; }
+            50% { box-shadow: 0 0 20px 8px #fef08a; }
+        }
+        .btn-shiny {
             position: relative;
-            z-index: 10;
-            padding: 1rem;
+            overflow: hidden;
+            background: linear-gradient(145deg, #a8a29e, #78716c);
+            transition: all 0.3s ease;
         }
-
-        .phone-screen {
-            background-color: #a8e890;
-            border-radius: 12px;
-            border: 3px inset #3a3a3a;
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
-            color: #333;
+        .btn-shiny:hover {
+            box-shadow: 0 0 20px #fde047, 0 0 30px #facc15;
+            transform: translateY(-2px);
         }
-        
-        /* Refined container style for soundboard and facts */
-        .glass-container {
-             background: rgba(0, 0, 0, 0.2);
-             backdrop-filter: blur(5px);
-             border: 1px solid rgba(255, 255, 255, 0.1);
-             border-radius: 16px;
-             padding: 1.5rem;
+        .btn-shiny::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: rotate(45deg);
+            transition: transform 0.5s ease;
         }
-        
-        @keyframes neon-glow-border {
-            0% { box-shadow: 0 0 5px var(--y2k-pink), 0 0 10px var(--y2k-pink), inset 0 0 5px var(--y2k-pink); }
-            33% { box-shadow: 0 0 5px var(--y2k-blue), 0 0 10px var(--y2k-blue), inset 0 0 5px var(--y2k-blue); }
-            66% { box-shadow: 0 0 5px var(--y2k-lime), 0 0 10px var(--y2k-lime), inset 0 0 5px var(--y2k-lime); }
-            100% { box-shadow: 0 0 5px var(--y2k-pink), 0 0 10px var(--y2k-pink), inset 0 0 5px var(--y2k-pink); }
+        .btn-shiny:hover::before {
+            transform: translate(30%, 30%) rotate(45deg);
         }
-
-        /* Photo button styles for the soundboard */
-        .photo-button {
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.2s ease-in-out;
+        /* Photo Frame Styles */
+        .photo-frame {
+            background: linear-gradient(145deg, #71717a, #a1a1aa);
+            border: 8px solid #4a4a5a;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.5);
             cursor: pointer;
-            width: 140px;
-            text-align: center;
-            border: 2px solid transparent;
-            animation: neon-glow-border 4s infinite linear;
         }
-
-        .photo-button img {
-            width: 100%;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 4px;
+        .photo-frame::before, .photo-frame::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #e5e7eb;
+            border-radius: 50%;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.6);
         }
-
-        .photo-button p {
-            margin-top: 8px;
-            font-size: 16px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .photo-button:hover { transform: scale(1.1) translateY(-10px); z-index: 20; }
+        .photo-frame::before { top: 10px; left: 10px; }
+        .photo-frame::after { bottom: 10px; right: 10px; }
         
-        /* Floating character styles. Set z-index to 1 so they are behind the phone. */
-        .character { position: absolute; width: 120px; height: 120px; background-size: contain; background-repeat: no-repeat; will-change: transform; opacity: 0.85; pointer-events: none; z-index: 1; }
-
-        /* --- Character Animations --- */
-        @keyframes float-diag { 0% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(40vw, -40vh) rotate(10deg); } 100% { transform: translate(0, 0) rotate(0deg); } }
-        @keyframes float-across { 0% { transform: translate(-15vw, 0) scaleX(-1); } 50% { transform: translate(85vw, 5vh) scaleX(1); } 100% { transform: translate(-15vw, 0) scaleX(-1); } }
-        @keyframes float-up-down { 0% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-20vh) rotate(5deg); } 100% { transform: translateY(0) rotate(-5deg); } }
-        @keyframes pauly-d-fist-pump { 0%, 100% { transform: translateY(0) rotate(5deg) scale(1); } 50% { transform: translateY(-30px) rotate(-8deg) scale(1.1); } }
-        @keyframes pop-in-out { 0%, 100% { opacity: 0; transform: scale(0.5); } 20%, 80% { opacity: 0.85; transform: scale(1); } }
-        @keyframes meatball-dance { 0%, 100% { transform: translate(0, 0) rotate(-3deg); } 25% { transform: translate(-10px, -10px) rotate(0deg); } 50% { transform: translate(0, 0) rotate(3deg); } 75% { transform: translate(10px, -10px) rotate(0deg); } }
-        @keyframes flame-float { 0% { transform: translateY(10vh) scale(1) rotate(5deg); opacity: 0.6; } 100% { transform: translateY(-100vh) scale(1.5) rotate(-5deg); opacity: 0; } }
-        
-        #pauly-d { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E🎧%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EPauly D%3C/text%3E%3C/svg%3E"); bottom: 5%; right: 5%; animation: pauly-d-fist-pump 1s infinite ease-in-out; }
-        #snooki { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E🤸%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3ESnooki%3C/text%3E%3C/svg%3E"); bottom: 10%; left: -15vw; animation: float-across 20s infinite linear; }
-        #the-situation { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E💪%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EThe Situation%3C/text%3E%3C/svg%3E"); top: 5%; left: 10%; animation: float-up-down 15s infinite ease-in-out; animation-delay: -5s; }
-        #jwoww { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle'%3E💅%3C/text%3E%3Ctext x='50' y='85' font-size='12' text-anchor='middle'%3EJWoww%3C/text%3E%3C/svg%3E"); top: 20%; left: 20%; animation: float-diag 25s infinite ease-in-out; }
-        
-        #flame1 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='80' text-anchor='middle'%3E🔥%3C/text%3E%3C/svg%3E"); bottom: -10vh; left: 10vw; animation: flame-float 10s infinite linear; }
-        #flame2 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='80' text-anchor='middle'%3E🔥%3C/text%3E%3C/svg%3E"); bottom: -10vh; left: 50vw; animation: flame-float 12s infinite linear; animation-delay: -5s; }
-        #flame3 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='65' font-size='80' text-anchor='middle'%3E🔥%3C/text%3E%3C/svg%3E"); bottom: -10vh; left: 80vw; animation: flame-float 9s infinite linear; animation-delay: -2s; }
-
-        /* Splash Screen styling */
-        #splash-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; 
-            transition: opacity 1s ease-in-out; 
-            z-index: 100;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow-y: auto; 
+        /* Modal Styles */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
         }
-        @keyframes duck-phone-quack { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
-        #duck-phone { font-size: 150px; animation: duck-phone-quack 0.5s infinite; }
-
-        /* Photo Modal Styling & Animation */
-        #photo-modal { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 50;}
-        #photo-modal-content { max-width: 90vw; max-height: 90vh; }
-        #photo-modal-close { top: 1rem; right: 1rem; font-size: 2rem; }
-        #photo-modal-quote {
-            color: white;
-            text-align: center;
-            padding: 1rem;
-            font-size: 1.5rem;
-            text-shadow: 0 0 5px var(--y2k-pink), 0 0 10px var(--y2k-pink);
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
         }
-        
-        @keyframes zoom-in {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        #image-modal-overlay {
+            transition: opacity 0.3s ease-in-out;
         }
-        
-        #photo-modal.flex #photo-modal-content {
-            animation: zoom-in 0.3s ease-out;
+        #enlarged-img {
+            transition: transform 0.3s ease-in-out;
         }
-
-        /* Y2K Button Style */
-        .y2k-button {
-            background: linear-gradient(to bottom, #87e0fd 0%,#53cbf1 40%,#05abe0 100%);
-            border: 2px solid #007399;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3), inset 0 2px 3px rgba(255,255,255,0.5);
-            transition: all 0.2s ease-in-out;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-            font-weight: bold;
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
+        #image-modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
         }
-        .y2k-button:hover {
-            filter: brightness(1.1);
+        #image-modal-overlay.show #enlarged-img {
+            transform: scale(1);
         }
-        .y2k-button:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 2px 3px rgba(255,255,255,0.5);
-        }
-        
-        /* New style for the facts headline */
-        .facts-headline {
-            font-family: 'VT323', monospace;
-            color: #fff;
-            text-shadow: 0 0 7px #fff, 0 0 10px var(--y2k-lime), 0 0 21px var(--y2k-lime), 0 0 42px var(--y2k-lime);
-        }
-
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-900 text-white flex flex-col items-center min-h-screen p-4">
 
-    <!-- Splash Screen -->
-    <div id="splash-screen">
-        <div id="duck-phone">🦆</div>
-        <h2 id="splash-text" class="text-3xl mt-4 glitter-text text-center">CABS ARE HERE!</h2>
-    </div>
-
-    <!-- Main Content -->
-    <main id="main-content" class="text-center w-full max-w-4xl mx-auto opacity-0 transition-opacity duration-1000">
-        <!-- Floating Characters -->
-        <div id="pauly-d" class="character"></div>
-        <div id="snooki" class="character"></div>
-        <div id="the-situation" class="character"></div>
-        <div id="jwoww" class="character"></div>
-        <div id="flame1" class="character"></div>
-        <div id="flame2" class="character"></div>
-        <div id="flame3" class="character"></div>
-
-        <!-- Header -->
-        <h1 class="text-5xl md:text-7xl mb-4 glitter-text">GTL Countdown</h1>
-        <p class="text-2xl md:text-3xl subtitle-text mb-8">
-            <span class="mx-2">💪</span>
-            IT'S T-SHIRT TIME!
-            <span class="mx-2">🏋️</span>
-        </p>
-
-        <!-- Countdown Timer -->
-        <div class="phone-container max-w-lg mx-auto">
-            <div class="phone-screen p-4 rounded-lg mb-4">
-                <p class="text-lg md:text-xl mb-2 font-bold">Next Episode Drops In...</p>
-                <div id="timer-display" class="text-4xl md:text-6xl font-bold tracking-widest flex justify-center space-x-2 md:space-x-4">
-                    <div class="flex flex-col"><span id="days">00</span><span class="text-xs">DAYS</span></div>
-                    <div>:</div>
-                    <div class="flex flex-col"><span id="hours">00</span><span class="text-xs">HRS</span></div>
-                    <div>:</div>
-                    <div class="flex flex-col"><span id="minutes">00</span><span class="text-xs">MIN</span></div>
-                    <div>:</div>
-                    <div class="flex flex-col"><span id="seconds">00</span><span class="text-xs">SEC</span></div>
-                </div>
+    <div class="text-center w-full max-w-4xl mx-auto z-10 py-8">
+        <!-- Bender Character -->
+        <div id="bender-container" class="mx-auto mb-8 w-48 h-64 relative">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-10 bender-body rounded-full"></div>
+            <div id="bender-antenna" class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-yellow-300 rounded-full border-2 border-gray-600"></div>
+            <div class="absolute top-8 w-full h-24 bg-gray-400 rounded-t-full border-4 border-gray-600"></div>
+            <div class="absolute top-12 left-1/2 -translate-x-1/2 w-40 h-16 bg-white rounded-full flex items-center justify-center space-x-4 border-4 border-gray-600">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg border-4 border-gray-800 flex items-center justify-center"><div class="w-4 h-4 bg-black rounded-sm"></div></div>
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg border-4 border-gray-800 flex items-center justify-center"><div class="w-4 h-4 bg-black rounded-sm"></div></div>
             </div>
-            <p id="episode-info" class="text-sm text-white/80">Loading episode info...</p>
+            <div class="absolute top-28 left-1/2 -translate-x-1/2 w-24 h-10 bender-mouth-grill rounded-md border-2 border-gray-600"></div>
+            <div class="absolute top-32 w-40 left-1/2 -translate-x-1/2 h-32 bender-body rounded-b-lg border-4 border-gray-600 flex justify-center items-center"><div class="w-32 h-24 bg-gray-500 rounded-md border-2 border-gray-700"></div></div>
         </div>
 
-        <!-- Soundboard Section -->
-        <div class="mt-12 glass-container">
-            <h3 class="text-3xl mb-6 glitter-text" style="color:var(--y2k-blue);">JERSEY SHORE CAST</h3>
-            <div id="soundboard-grid" class="flex flex-wrap justify-center items-start gap-8">
-                <!-- Photo buttons will be generated by JavaScript -->
-            </div>
+        <h1 class="orbitron text-4xl md:text-6xl font-black uppercase text-glow tracking-wider">Happy Father's Day, Rene!</h1>
+        <p class="mt-4 text-xl md:text-2xl text-blue-300">To The Best Meatbag in the Universe!</p>
+
+        <!-- Personal Message Section -->
+        <div class="mt-12 w-full max-w-xl mx-auto bg-gray-800/50 p-4 rounded-lg border border-gray-600">
+            <p class="text-lg text-gray-200 leading-relaxed">
+                Happy fathers day Dad. Thanks for always putting up with your sometimes insufferable kids( mostly dexter, am i right?) we appreciate you and will always have your back. I love you and i hope you like this.
+            </p>
         </div>
 
-        <!-- Fun Facts Section -->
-        <div class="mt-12 glass-container">
-            <h3 class="text-3xl mb-4 facts-headline">SHORE-LY YOU DIDN'T KNOW!</h3>
-            <p id="fact-display" class="text-lg min-h-[3em] my-4 text-white/90">Click the button for a random fact!</p>
-            <button id="generate-fact-btn" class="y2k-button">Get Fact!</button>
-        </div>
-    </main>
-
-    <!-- Photo Enlarger Modal -->
-    <div id="photo-modal" class="fixed inset-0 flex-col items-center justify-center p-4 hidden">
-        <div id="photo-modal-backdrop" class="absolute inset-0"></div>
-        <div id="photo-modal-content" class="relative flex flex-col items-center">
-            <button id="photo-modal-close" class="absolute text-white">&times;</button>
-            <img id="photo-modal-img" src="" alt="Enlarged cast photo" class="object-contain max-w-full max-h-[80vh]">
-            <p id="photo-modal-quote"></p>
-        </div>
-    </div>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let audioInitialized = false;
-
-            // --- CENTRALIZED PHOTO AND SOUND DATA ---
-            const castData = [
-                { id: 'tshirt', name: 'Pauly D', quote: '"T-Shirt Time!"', img: 'https://www.usmagazine.com/wp-content/uploads/2020/09/DJ-Pauly-D-Talks-About-His-Love-of-Hair-and-His-New-Got2b-Products.jpg?crop=51px%2C12px%2C1866px%2C1054px&resize=1000%2C563&quality=82&strip=all' },
-                { id: 'yeah', name: 'Sammi', quote: '"RON, STAAHP!"', img: 'https://www.realitytea.com/wp-content/uploads/sites/6/2024/02/GettyImages-1588833062.jpg?resize=1024,683' },
-                { id: 'situation', name: 'The Situation', quote: '"We got a situation!"', img: 'https://media-cldnry.s-nbcnews.com/image/upload/t_fit-560w,f_auto,q_auto:best/newscms/2021_03/1665026/mike-the-situation-square-today.jpg' },
-                { id: 'hello', name: 'Angelina', quote: '"Um, Hello?!"', img: 'https://ntvb.tmsimg.com/assets/assets/587667_v9_bc.jpg' },
-                { id: 'meatball', name: 'Snooki', quote: '"I\'m a meatball!"', img: 'https://people.com/thmb/OKd84RQdriONs51r8aKnTDeOpl8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(734x227:736x229):format(webp)/Nicole-Snooki-Polizzi-020124-70985eeec4ce47ce99e0711f14e8a181.jpg' },
-                { id: 'duck', name: 'Duck Phone', quote: '"Quack Quack"', img: 'https://zandymangoldnyc.com/wp-content/uploads/2011/01/4m8w0759_zm_web.jpg' }
-            ];
-
-            // --- FUN FACTS DATA ---
-            const jerseyShoreFacts = [
-                "The iconic duck phone was found by producers in a local thrift store.",
-                "Snooki's real name is Nicole Polizzi.",
-                "The show was originally going to be a competition series on VH1 called 'America's Biggest Guido.'",
-                "Pauly D is the only cast member to appear in every single episode of Jersey Shore and its spin-offs.",
-                "The 'GTL' routine (Gym, Tan, Laundry) became a national catchphrase.",
-                "Before the show, Jenni 'JWoww' Farley owned her own graphic design business.",
-                "The cast didn't have access to phones, TV, or the internet to encourage more interaction.",
-                "The Shore Store, where the cast worked, is a real place in Seaside Heights, New Jersey.",
-                "Deena was originally supposed to be on Season 1 but had to back out due to family issues.",
-                "Vinny is the only cast member who actually lived in Staten Island.",
-                "The house's hot tub was reportedly so over-used it had to be replaced multiple times.",
-                "Snooki's famous 'poof' hairstyle required a significant amount of hairspray to maintain.",
-            ];
-
-            // --- TONE.JS SOUNDBOARD LOGIC ---
-            const clickVolume = new Tone.Volume(-10).toDestination(); 
-            const clickSound = new Tone.PluckSynth({ attackNoise: 0.5, dampening: 8000, resonance: 0.9 }).connect(clickVolume);
-            const splashSound = new Tone.PluckSynth().connect(clickVolume);
-            
-            function playSound(soundName) {
-                if (!audioInitialized) return;
-                const note = soundName === 'splash' ? 'C5' : 'C4';
-                const synth = soundName === 'splash' ? splashSound : clickSound;
-                synth.triggerAttack(note, Tone.now());
-            }
-
-            // --- Splash Screen and App Start Logic ---
-            const splashScreen = document.getElementById('splash-screen');
-            const mainContent = document.getElementById('main-content');
-            
-            async function startApp() {
-                if (audioInitialized) return;
-                await Tone.start();
-                audioInitialized = true;
-                playSound('splash');
-                splashScreen.style.opacity = '0';
-                splashScreen.style.pointerEvents = 'none';
-                setTimeout(() => { 
-                    mainContent.style.opacity = '1';
-                }, 500);
-            }
-
-            document.body.addEventListener('click', startApp, { once: true });
-            document.body.addEventListener('touchend', startApp, { once: true });
-
-            // --- Countdown Timer Logic ---
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
-            const episodeInfoEl = document.getElementById('episode-info');
-            const timerDisplayEl = document.getElementById('timer-display');
-
-            function getNextThursday8PMET() {
-                const now = new Date();
-                const timeZone = 'America/New_York';
-                const nowInET = new Date(now.toLocaleString('en-US', { timeZone }));
-                const todayInET = nowInET.getDay(); // Sunday = 0, Thursday = 4
-                let daysUntilThursday = (4 - todayInET + 7) % 7;
-                if (daysUntilThursday === 0 && nowInET.getHours() >= 20) {
-                    daysUntilThursday = 7;
-                }
-                const targetDate = new Date(nowInET);
-                targetDate.setDate(targetDate.getDate() + daysUntilThursday);
-                targetDate.setHours(20, 0, 0, 0);
-                return targetDate;
-            }
-
-            const countdownDate = getNextThursday8PMET();
-            episodeInfoEl.textContent = `Episode Airs: ${countdownDate.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric' })} at 8:00 PM ET`;
-            
-            const countdownInterval = setInterval(() => {
-                const now = new Date();
-                const distance = countdownDate - now;
-
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    timerDisplayEl.innerHTML = `<div class="text-3xl">The Episode Has Aired!</div>`;
-                    episodeInfoEl.textContent = "It's T-Shirt Time!";
-                    return;
-                }
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                daysEl.textContent = String(days).padStart(2, '0');
-                hoursEl.textContent = String(hours).padStart(2, '0');
-                minutesEl.textContent = String(minutes).padStart(2, '0');
-                secondsEl.textContent = String(seconds).padStart(2, '0');
-            }, 1000);
-
-            // --- Photo Modal Logic ---
-            const photoModal = document.getElementById('photo-modal');
-            const photoModalImg = document.getElementById('photo-modal-img');
-            const photoModalQuote = document.getElementById('photo-modal-quote');
-            const photoModalCloseBtn = document.getElementById('photo-modal-close');
-            const photoModalBackdrop = document.getElementById('photo-modal-backdrop');
-
-            function openPhotoModal(imgSrc, quote) {
-                photoModalImg.src = imgSrc;
-                photoModalQuote.textContent = quote;
-                photoModal.classList.remove('hidden');
-                photoModal.classList.add('flex');
-            }
-
-            function closePhotoModal() {
-                photoModal.classList.add('hidden');
-                photoModal.classList.remove('flex');
-                photoModalImg.src = '';
-                photoModalQuote.textContent = '';
-            }
-
-            // --- DYNAMICALLY CREATE AND ADD SOUNDBOARD BUTTONS ---
-            const soundboardGrid = document.getElementById('soundboard-grid');
-            castData.forEach(castMember => {
-                const button = document.createElement('div');
-                button.className = 'photo-button';
-                button.dataset.sound = castMember.id;
-                const img = document.createElement('img');
-                img.src = castMember.img;
-                img.alt = castMember.name;
-                img.onerror = function() { this.onerror=null; this.src=`https://placehold.co/120x90/333/fff?text=${castMember.name.replace(' ', '+')}`; };
-                const p = document.createElement('p');
-                p.textContent = castMember.quote;
-                button.appendChild(img);
-                button.appendChild(p);
-                button.addEventListener('click', () => {
-                    playSound(castMember.id);
-                    openPhotoModal(castMember.img, castMember.quote);
-                });
-                soundboardGrid.appendChild(button);
-            });
-            
-            photoModalCloseBtn.addEventListener('click', closePhotoModal);
-            photoModalBackdrop.addEventListener('click', closePhotoModal);
-
-            // --- Fun Facts Logic ---
-            const generateFactBtn = document.getElementById('generate-fact-btn');
-            const factDisplay = document.getElementById('fact-display');
-
-            generateFactBtn.addEventListener('click', () => {
-                const randomIndex = Math.floor(Math.random() * jerseyShoreFacts.length);
-                factDisplay.textContent = jerseyShoreFacts[randomIndex];
-            });
-
-        });
-    </script>
-</body>
-</html>
+        <!-- Photo Section -->
+        <div class="mt-8 w-full max-w-2xl mx-auto flex flex-col sm:flex-row gap-4 justify-center">
+            <!-- PHOTO 1 -->
+            <div class="photo-container photo-frame p-2 rounded-lg relative w-full sm:w-1/2">
+                 <!-- INSTRUCTIONS: Replace the text inside src="..." with your first Base64 string -->
+                 <img src= data:image/jpeg;base64,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
