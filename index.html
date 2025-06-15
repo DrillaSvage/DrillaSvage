@@ -7,101 +7,120 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bangers&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #1a1a2e;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(57, 62, 117, 0.4) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(35, 155, 144, 0.3) 0%, transparent 40%);
-        }
-        .orbitron {
             font-family: 'Orbitron', sans-serif;
+            background-color: #0c0a1a;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(57, 62, 117, 0.4) 0%, transparent 30%),
+                radial-gradient(circle at 85% 75%, rgba(35, 155, 144, 0.3) 0%, transparent 30%);
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
         }
-        .text-glow {
-            text-shadow: 0 0 8px rgba(59, 130, 246, 0.6), 0 0 20px rgba(59, 130, 246, 0.4);
+        .bangers { font-family: 'Bangers', cursive; }
+
+        /* --- Splash Screen --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0c0a1a;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease-out 0.2s;
         }
+        #splash-screen.hidden {
+            transform: scale(3);
+            opacity: 0;
+            pointer-events: none;
+        }
+        #splash-title {
+            font-size: clamp(4rem, 15vw, 8rem);
+            color: #ffde00;
+            text-shadow: -4px 4px 0px #c70000;
+            animation: title-intro 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+        #splash-prompt {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes title-intro {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px #fff; }
+            50% { opacity: 0.6; text-shadow: none; }
+        }
+
+        /* --- Main App Content --- */
+        .text-glow { text-shadow: 0 0 8px rgba(59, 130, 246, 0.6), 0 0 20px rgba(59, 130, 246, 0.4); }
         .bender-body { background-color: #8D918D; }
         .bender-mouth-grill {
             height: 40px;
             background-image: repeating-linear-gradient(0deg, #444, #444 3px, transparent 3px, transparent 7px);
         }
-        #bender-antenna {
-            animation: antenna-glow 3s infinite ease-in-out;
-        }
+        #bender-antenna { animation: antenna-glow 3s infinite ease-in-out; }
         @keyframes antenna-glow {
             0%, 100% { box-shadow: 0 0 10px 2px #fef08a; }
             50% { box-shadow: 0 0 20px 8px #fef08a; }
         }
         .btn-shiny {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(145deg, #a8a29e, #78716c);
-            transition: all 0.3s ease;
+            position: relative; overflow: hidden; background: linear-gradient(145deg, #a8a29e, #78716c); transition: all 0.3s ease;
         }
-        .btn-shiny:hover {
-            box-shadow: 0 0 20px #fde047, 0 0 30px #facc15;
-            transform: translateY(-2px);
-        }
-        .btn-shiny::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.15);
-            transform: rotate(45deg);
-            transition: transform 0.5s ease;
-        }
-        .btn-shiny:hover::before {
-            transform: translate(30%, 30%) rotate(45deg);
-        }
-        /* Photo Frame Styles */
-        .photo-frame {
-            background: linear-gradient(145deg, #71717a, #a1a1aa);
-            border: 8px solid #4a4a5a;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.5);
-            cursor: pointer;
-        }
-        .photo-frame::before, .photo-frame::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #e5e7eb;
-            border-radius: 50%;
-            box-shadow: inset 0 0 3px rgba(0,0,0,0.6);
-        }
-        .photo-frame::before { top: 10px; left: 10px; }
-        .photo-frame::after { bottom: 10px; right: 10px; }
+        .btn-shiny:hover { box-shadow: 0 0 20px #fde047, 0 0 30px #facc15; transform: translateY(-2px); }
+        .btn-shiny::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: rgba(255, 255, 255, 0.15); transform: rotate(45deg); transition: transform 0.5s ease; }
+        .btn-shiny:hover::before { transform: translate(30%, 30%) rotate(45deg); }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .modal-content { transition: transform 0.3s ease-in-out; }
         
-        /* Modal Styles */
-        .modal-overlay {
-            transition: opacity 0.3s ease-in-out;
+        /* Background Animation */
+        #background-animations { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
+        .animated-item { position: absolute; will-change: transform; animation-timing-function: linear; animation-iteration-count: infinite; }
+        .spaceship { animation-name: float-across; opacity: 0.3; }
+        .beer-can { animation-name: tumble-across; opacity: 0.2; }
+        @keyframes float-across {
+            0% { transform: translateX(-200px); }
+            100% { transform: translateX(110vw); }
         }
-        .modal-content {
-            transition: transform 0.3s ease-in-out;
-        }
-        #image-modal-overlay {
-            transition: opacity 0.3s ease-in-out;
-        }
-        #enlarged-img {
-            transition: transform 0.3s ease-in-out;
-        }
-        #image-modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #image-modal-overlay.show #enlarged-img {
-            transform: scale(1);
+        @keyframes tumble-across {
+            0% { transform: translateX(-100px) rotate(0deg); }
+            100% { transform: translateX(110vw) rotate(360deg); }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col items-center min-h-screen p-4">
+<body class="bg-gray-900 text-white">
 
-    <div class="text-center w-full max-w-4xl mx-auto z-10 py-8">
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1 id="splash-title" class="bangers tracking-wider">FUTURAMA</h1>
+        <p class="orbitron text-2xl mt-8 text-glow">Father's Day Special</p>
+        <p id="splash-prompt" class="orbitron text-xl mt-20 text-yellow-300">Click to Enter</p>
+    </div>
+
+    <!-- Floating Background Items -->
+    <div id="background-animations">
+        <div class="animated-item spaceship" style="top: 10%; animation-duration: 25s; width: 150px; animation-delay: -5s;"><svg viewBox="0 0 200 100" fill="#94a3b8"><path d="M50,5 C20,20 10,40 10,50 C10,60 20,80 50,95 L180,50 Z"></path><path d="M40,50 A40,40 0 0,0 120,50" fill="none" stroke="#e2e8f0" stroke-width="8"></path><path d="M10,50 L180,50" fill="none" stroke="#475569" stroke-width="4"></path><path d="M170,50 L195,40 L195,60 Z" fill="#ef4444"></path></svg></div>
+        <div class="animated-item spaceship" style="top: 75%; animation-duration: 35s; width: 180px; animation-delay: -15s;"><svg viewBox="0 0 200 60" fill="#4c1d95"><path d="M10,30 C30,0 170,0 190,30 C170,60 30,60 10,30 Z M0,30 L200,30" stroke="#a78bfa" stroke-width="5"></path></svg></div>
+        <div class="animated-item spaceship" style="top: 85%; animation-duration: 20s; width: 60px; animation-delay: -10s;"><svg viewBox="0 0 100 100" fill="#475569"><path d="M50 0 L100 100 L75 100 L50 50 L25 100 L0 100 Z"></path></svg></div>
+        <div class="animated-item beer-can" style="top: 20%; animation-duration: 18s; width: 25px; animation-delay: 0s;">🍺</div>
+        <div class="animated-item beer-can" style="top: 50%; animation-duration: 22s; width: 30px; animation-delay: -7s;">🍺</div>
+        <div class="animated-item beer-can" style="top: 65%; animation-duration: 15s; width: 20px; animation-delay: -12s;">🍺</div>
+        <div class="animated-item beer-can" style="top: 90%; animation-duration: 28s; width: 35px; animation-delay: -20s;">🍺</div>
+        <div class="animated-item spaceship" style="top: 5%; animation-duration: 50s; width: 40px; animation-delay: -2s;"><svg viewBox="0 0 100 100" fill="#0d9488"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="20" fill="#14b8a6"/></svg></div>
+        <div class="animated-item spaceship" style="top: 45%; animation-duration: 60s; width: 100px; animation-delay: -30s;"><svg viewBox="0 0 100 50" fill="#be123c"><path d="M0,25 Q50,-10 100,25 L50,50 Z"></path></svg></div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="relative w-full max-w-4xl mx-auto z-10 p-4 opacity-0 transition-opacity duration-500">
         <!-- Bender Character -->
         <div id="bender-container" class="mx-auto mb-8 w-48 h-64 relative">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-10 bender-body rounded-full"></div>
@@ -115,19 +134,114 @@
             <div class="absolute top-32 w-40 left-1/2 -translate-x-1/2 h-32 bender-body rounded-b-lg border-4 border-gray-600 flex justify-center items-center"><div class="w-32 h-24 bg-gray-500 rounded-md border-2 border-gray-700"></div></div>
         </div>
 
-        <h1 class="orbitron text-4xl md:text-6xl font-black uppercase text-glow tracking-wider">Happy Father's Day, Rene!</h1>
-        <p class="mt-4 text-xl md:text-2xl text-blue-300">To The Best Meatbag in the Universe!</p>
-
-        <!-- Personal Message Section -->
-        <div class="mt-12 w-full max-w-xl mx-auto bg-gray-800/50 p-4 rounded-lg border border-gray-600">
-            <p class="text-lg text-gray-200 leading-relaxed">
-                Happy fathers day Dad. Thanks for always putting up with your sometimes insufferable kids( mostly dexter, am i right?) we appreciate you and will always have your back. I love you and i hope you like this.
-            </p>
+        <div class="text-center">
+            <h1 class="orbitron text-4xl md:text-6xl font-black uppercase text-glow tracking-wider">Happy Father's Day, Rene!</h1>
+            <p class="mt-4 text-xl md:text-2xl text-blue-300">To The Best Meatbag in the Universe!</p>
+    
+            <!-- Personal Message Section -->
+            <div class="mt-12 w-full max-w-xl mx-auto bg-gray-800/50 p-4 rounded-lg border border-gray-600 backdrop-blur-sm">
+                <p class="text-lg text-gray-200 leading-relaxed">
+                    Happy fathers day Dad. Thanks for always putting up with your sometimes insufferable kids( mostly dexter, am i right?) we appreciate you and will always have your back. I love you and i hope you like this.
+                </p>
+            </div>
+    
+            <!-- Family Emojis Section -->
+            <div class="mt-10 p-4 w-full max-w-sm mx-auto bg-gray-900/40 rounded-lg border border-gray-700 backdrop-blur-sm">
+                <div class="flex items-end justify-center gap-x-3 md:gap-x-4 text-4xl md:text-5xl">
+                    <span title="Dad">👨🏽</span>
+                    <span title="Mom">👩🏽</span>
+                    <span title="Sibling 26">🧑🏽</span>
+                    <span title="Sibling 25">🧑🏽</span>
+                    <span title="Sibling 13">🧒🏽</span>
+                    <span title="Cat" class="text-3xl md:text-4xl">🐈‍⬛</span>
+                </div>
+            </div>
+    
+            <div id="quote-container" class="mt-12 h-12 flex items-center justify-center">
+                <p id="quote" class="text-lg italic text-gray-400 text-center transition-opacity duration-500"></p>
+            </div>
+            
+            <button id="generate-btn" class="btn-shiny orbitron my-8 px-8 py-4 text-xl font-bold text-gray-900 rounded-lg shadow-lg border-2 border-gray-500">
+                Press For a Glorious Message
+            </button>
         </div>
+    </main>
 
-        <!-- Photo Section -->
-        <div class="mt-8 w-full max-w-2xl mx-auto flex flex-col sm:flex-row gap-4 justify-center">
-            <!-- PHOTO 1 -->
-            <div class="photo-container photo-frame p-2 rounded-lg relative w-full sm:w-1/2">
-                 <!-- INSTRUCTIONS: Replace the text inside src="..." with your first Base64 string -->
-                 <img src= data:image/jpeg;base64,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
+    <!-- Bender Message Modal -->
+    <div id="modal-overlay" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
+        <div id="modal-content" class="modal-content bg-gray-800 border-2 border-blue-400 rounded-2xl shadow-2xl p-6 md:p-8 max-w-lg w-full text-center transform scale-95">
+            <h2 id="modal-title" class="orbitron text-2xl font-bold text-yellow-300">A Message From Bender</h2>
+            <div id="modal-body" class="mt-4 text-lg text-gray-200 min-h-[100px] flex items-center justify-center"></div>
+            <button id="close-modal-btn" class="btn-shiny orbitron mt-8 px-6 py-3 text-lg font-bold text-gray-900 rounded-lg shadow-md border-2 border-gray-500">Neat!</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const splashScreen = document.getElementById('splash-screen');
+            const mainContent = document.getElementById('main-content');
+
+            // --- Splash Screen Logic ---
+            splashScreen.addEventListener('click', () => {
+                splashScreen.classList.add('hidden');
+                setTimeout(() => {
+                    mainContent.style.opacity = '1';
+                    // Allow scrolling on the body once the main content is visible
+                    document.body.style.overflowY = 'auto';
+                }, 100); // A small delay to let the splash transition start
+            }, { once: true }); // The event listener will only fire once.
+
+            // Set body to not scroll initially
+            document.body.style.overflowY = 'hidden';
+
+            // --- Main App Logic ---
+            const cyclingQuotes = ["Bite my shiny metal ass!","I'm so great, it's sick.","Hey, sexy mama. Wanna kill all humans?","This is the worst kind of discrimination. The kind against me!","I'm gonna go build my own theme park! With blackjack! And hookers!","My story is a lot like yours, only more interesting 'cause it involves robots.","Of all the friends I've had, you're the first."];
+            const benderFathersDayMessages = ["Happy Father's Day, meatbag! Remember, I only tolerate you because you might have beer.","Shut up baby, I know it! You're a pretty good dad. For a human.","Congratulations on spawning a meat-puppet. Now, where's the party? There better be blackjack!","Of all the dads in the world, you're one of them. Now, let's go do something fun and illegal.","Happy Father's Day! You've taught me so much about loafing and being a burden on society. I'm proud of you!","Let's get one thing straight... you're the second greatest dad ever. I, of course, am the first.","A real father is a master of the three B's: Belching, Beer, and Bender! You're 2 for 3. Not bad.","Happy Father's Day! I got you a gift. It's me. You're welcome."];
+
+            const quoteElement = document.getElementById('quote');
+            let quoteIndex = 0;
+            function showNextQuote() {
+                quoteElement.style.opacity = '0';
+                setTimeout(() => {
+                    quoteIndex = (quoteIndex + 1) % cyclingQuotes.length;
+                    quoteElement.textContent = `"${cyclingQuotes[quoteIndex]}"`;
+                    quoteElement.style.opacity = '1';
+                }, 500);
+            }
+            quoteElement.textContent = `"${cyclingQuotes[quoteIndex]}"`;
+            quoteElement.style.opacity = '1';
+            setInterval(showNextQuote, 5000);
+
+            // Bender Message Modal Logic
+            const generateBtn = document.getElementById('generate-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalContent = document.getElementById('modal-content');
+            const modalBody = document.getElementById('modal-body');
+            const modalTitle = document.getElementById('modal-title');
+            let lastMessageIndex = -1;
+
+            function generateBenderMessage() {
+                let messageIndex;
+                do { messageIndex = Math.floor(Math.random() * benderFathersDayMessages.length); } while (benderFathersDayMessages.length > 1 && messageIndex === lastMessageIndex);
+                lastMessageIndex = messageIndex;
+                modalTitle.textContent = "A Message From Bender";
+                modalBody.innerHTML = `<p>${benderFathersDayMessages[messageIndex]}</p>`;
+            }
+            function openModal() {
+                modalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95');
+                generateBenderMessage();
+            }
+            function closeModal() {
+                modalOverlay.classList.add('opacity-0', 'pointer-events-none');
+                modalContent.classList.add('scale-95');
+            }
+            generateBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (event) => { if (event.target === modalOverlay) closeModal(); });
+        });
+    </script>
+
+</body>
+</html>
